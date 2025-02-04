@@ -14,6 +14,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
+import SignInButton from './SignInButton';
 
 function Menu() {
   return (
@@ -33,11 +34,12 @@ function DesktopNav() {
           <ShoppingCart /> Cart
         </Link>
       </Button>
-      <Button asChild>
+      {/* <Button asChild>
         <Link href='/sign-in'>
           <UserIcon /> Sign-in
         </Link>
-      </Button>
+      </Button> */}
+      <SignInButton />
     </nav>
   );
 }

@@ -34,6 +34,7 @@ function ProductImages({ images }: { images: string[] }) {
               alt={`product image ${index} thumbnail`}
               fill
               className='object-fit object-center'
+              quality={70}
             />
           </button>
         ))}
