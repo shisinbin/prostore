@@ -1,7 +1,12 @@
 'use server';
-import { signInFormSchema } from '../validators';
+import { signInFormSchema, signUpFormSchema } from '../validators';
 import { signIn, signOut } from '@/auth';
 import { isRedirectError } from 'next/dist/client/components/redirect-error';
+import { hashSync } from 'bcrypt-ts-edge';
+import { prisma } from '@/db/prisma';
+// import { ZodError } from 'zod';
+// import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { formatError } from '../utils';
 
 // Sign in the user with credentials
 export async function signInWithCredentials(
@@ -29,4 +34,50 @@ export async function signInWithCredentials(
 // Sign user out
 export async function signOutUser() {
   await signOut();
+}
+
+// Sign up user
+export async function signUpUser(prevState: any, formData: FormData) {
+  try {
+    const user = signUpFormSchema.parse({
+      name: formData.get('name'),
+      email: formData.get('email'),
+      password: formData.get('password'),
+      confirmPassword: formData.get('confirmPassword'),
+    });
+
+    const plainPassword = user.password;
+
+    user.password = hashSync(user.password, 10);
+
+    await prisma.user.create({
+      data: {
+        name: user.name,
+        email: user.email,
+        password: user.password,
+      },
+    });
+
+    await signIn('credentials', {
+      email: user.email,
+      password: plainPassword,
+    });
+
+    return { success: true, message: 'User registered successfully' };
+  } catch (error) {
+    // console.log(error.name);
+    // console.log(error.code);
+    // console.log(error.errors);
+    // console.log(error.meta?.target);
+    // console.log('zoderror?', error instanceof ZodError);
+    // console.log(
+    //   'prismaclientknownrequesterror?',
+    //   error instanceof PrismaClientKnownRequestError
+    // );
+    if (isRedirectError(error)) {
+      throw error;
+    }
+
+    return { success: false, message: formatError(error) };
+  }
 }

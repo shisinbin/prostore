@@ -7,8 +7,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
-import { signInWithCredentials } from '@/lib/actions/user.actions';
-import { signInDefaultValues } from '@/lib/constants';
+import { signUpUser } from '@/lib/actions/user.actions';
+import { signUpDefaultValues } from '@/lib/constants';
 // import { useSearchParams } from 'next/navigation';
 
 const initialState = {
@@ -16,9 +16,9 @@ const initialState = {
   message: '',
 };
 
-function CredentialsSignInForm() {
+function SignUpForm() {
   const [state, formAction, pending] = React.useActionState(
-    signInWithCredentials,
+    signUpUser,
     initialState
   );
 
@@ -26,19 +26,29 @@ function CredentialsSignInForm() {
   // const callbackUrl = searchParams.get('callbackUrl');
 
   return (
-    <form action={formAction} className='space-y-6'>
+    <form action={formAction} className='space-y-4'>
       {/* {callbackUrl && (
         <input type='hidden' name='redirectTo' value={callbackUrl} />
       )} */}
+      <div>
+        <Label htmlFor='name'>Name</Label>
+        <Input
+          id='name'
+          name='name'
+          type='text'
+          autoComplete='name'
+          defaultValue={signUpDefaultValues.name}
+          className='min-w-[300px]'
+        />
+      </div>
       <div>
         <Label htmlFor='email'>Email</Label>
         <Input
           id='email'
           name='email'
           type='email'
-          required
           autoComplete='email'
-          defaultValue={signInDefaultValues.email}
+          defaultValue={signUpDefaultValues.email}
           className='min-w-[300px]'
         />
       </div>
@@ -50,13 +60,25 @@ function CredentialsSignInForm() {
           type='password'
           required
           autoComplete='password'
-          defaultValue={signInDefaultValues.password}
+          defaultValue={signUpDefaultValues.password}
+          className='min-w-[300px]'
+        />
+      </div>
+      <div>
+        <Label htmlFor='confirmPassword'>Confirm Password</Label>
+        <Input
+          id='confirmPassword'
+          name='confirmPassword'
+          type='password'
+          required
+          autoComplete='confirmPassword'
+          defaultValue={signUpDefaultValues.confirmPassword}
           className='min-w-[300px]'
         />
       </div>
 
       <Button disabled={pending} className='w-full' variant='default'>
-        {pending ? 'Signing in...' : 'Sign In'}
+        {pending ? 'Submitting...' : 'Sign Up'}
       </Button>
 
       <p
@@ -69,17 +91,17 @@ function CredentialsSignInForm() {
       </p>
 
       <div className='text-sm text-center text-muted-foreground'>
-        Don&apos;t have an account?{' '}
+        Already have an account?{' '}
         <Link
-          href='/sign-up'
+          href='/sign-in'
           target='_self'
           className='font-medium text-primary hover:text-primary/80 hover:underline transition-colors'
         >
-          Sign Up
+          Sign In
         </Link>
       </div>
     </form>
   );
 }
 
-export default CredentialsSignInForm;
+export default SignUpForm;

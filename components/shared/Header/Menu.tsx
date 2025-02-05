@@ -1,9 +1,5 @@
 import Link from 'next/link';
-import {
-  EllipsisVertical,
-  ShoppingCart,
-  UserIcon,
-} from 'lucide-react';
+import { EllipsisVertical, ShoppingCart } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import DarkLightToggle from './DarkLightToggle';
@@ -14,7 +10,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import SignInButton from './SignInButton';
+import UserButton from './UserButton';
 
 function Menu() {
   return (
@@ -34,12 +30,7 @@ function DesktopNav() {
           <ShoppingCart /> Cart
         </Link>
       </Button>
-      {/* <Button asChild>
-        <Link href='/sign-in'>
-          <UserIcon /> Sign-in
-        </Link>
-      </Button> */}
-      <SignInButton />
+      <UserButton />
     </nav>
   );
 }
@@ -59,11 +50,7 @@ function MobileNav() {
               <ShoppingCart /> Cart
             </Link>
           </Button>
-          <Button asChild>
-            <Link href='/sign-in'>
-              <UserIcon /> Sign-in
-            </Link>
-          </Button>
+          <UserButton />
           <SheetDescription />
         </SheetContent>
       </Sheet>
