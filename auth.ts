@@ -74,12 +74,13 @@ export const authConfig = {
         // If user has no name then use the email
         if (user.name === 'NO_NAME') {
           token.name = user.email!.split('@')[0];
-        }
 
-        await prisma.user.update({
-          where: { id: user.id },
-          data: { name: token.name },
-        });
+          // Update the database to reflect the token name
+          await prisma.user.update({
+            where: { id: user.id },
+            data: { name: token.name },
+          });
+        }
       }
 
       return token;
