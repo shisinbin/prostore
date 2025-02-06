@@ -65,15 +65,6 @@ export async function signUpUser(prevState: any, formData: FormData) {
 
     return { success: true, message: 'User registered successfully' };
   } catch (error) {
-    // console.log(error.name);
-    // console.log(error.code);
-    // console.log(error.errors);
-    // console.log(error.meta?.target);
-    // console.log('zoderror?', error instanceof ZodError);
-    // console.log(
-    //   'prismaclientknownrequesterror?',
-    //   error instanceof PrismaClientKnownRequestError
-    // );
     if (isRedirectError(error)) {
       throw error;
     }

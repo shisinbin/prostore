@@ -9,7 +9,6 @@ import { Label } from '@/components/ui/label';
 
 import { signUpUser } from '@/lib/actions/user.actions';
 import { signUpDefaultValues } from '@/lib/constants';
-// import { useSearchParams } from 'next/navigation';
 
 const initialState = {
   success: false,
@@ -22,14 +21,8 @@ function SignUpForm() {
     initialState
   );
 
-  // const searchParams = useSearchParams();
-  // const callbackUrl = searchParams.get('callbackUrl');
-
   return (
     <form action={formAction} className='space-y-4'>
-      {/* {callbackUrl && (
-        <input type='hidden' name='redirectTo' value={callbackUrl} />
-      )} */}
       <div>
         <Label htmlFor='name'>Name</Label>
         <Input
