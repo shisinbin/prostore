@@ -1,11 +1,10 @@
 import { notFound } from 'next/navigation';
-import { Plus } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import ProductPrice from '@/components/shared/Product/ProductPrice';
 import ProductImages from '@/components/shared/Product/ProductImages';
+import AddToCart from '@/components/shared/Product/AddToCart';
 
 import { getProductBySlug } from '@/lib/actions/product.actions';
 
@@ -62,9 +61,16 @@ async function ProductDetailsPage(props: {
                 )}
               </div>
               {product.stock > 0 && (
-                <Button className='w-full mt-2'>
-                  <Plus /> Add To Cart
-                </Button>
+                <AddToCart
+                  item={{
+                    productId: product.id,
+                    name: product.name,
+                    slug: product.slug,
+                    qty: 1,
+                    image: product.images![0],
+                    price: product.price,
+                  }}
+                />
               )}
             </CardContent>
           </Card>
