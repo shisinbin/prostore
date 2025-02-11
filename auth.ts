@@ -4,56 +4,54 @@ import { prisma } from '@/db/prisma';
 import Credentials from 'next-auth/providers/credentials';
 import { compare } from 'bcrypt-ts-edge';
 import type { NextAuthConfig } from 'next-auth';
-// import { cookies } from 'next/headers';
-import { NextResponse } from 'next/server';
 
-const credentialsProvider = Credentials({
-  credentials: {
-    email: { type: 'email' },
-    password: { type: 'password' },
-  },
-  authorize: async (credentials) => {
-    if (!credentials?.email || !credentials?.password) return null;
-
-    // Find user in database
-    const user = await prisma.user.findUnique({
-      where: {
-        email: credentials.email as string,
-      },
-    });
-
-    // Check if user exists and has password
-    if (!user || !user.password) return null;
-
-    // Check if password matches
-    const isMatch = await compare(
-      credentials.password as string,
-      user.password
-    );
-    if (!isMatch) return null;
-
-    // Return user data
-    return {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-    };
-  },
-});
+import commonAuthConfig from '@/auth.config';
 
 export const authConfig = {
-  pages: {
-    signIn: '/sign-in',
-    error: '/sign-in',
-  },
-  adapter: PrismaAdapter(prisma),
   session: {
     strategy: 'jwt',
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
-  providers: [credentialsProvider],
+  adapter: PrismaAdapter(prisma),
+  providers: [
+    Credentials({
+      credentials: {
+        email: { type: 'email' },
+        password: { type: 'password' },
+      },
+      authorize: async (credentials) => {
+        if (!credentials?.email || !credentials?.password)
+          return null;
+
+        // Find user in database
+        const user = await prisma.user.findUnique({
+          where: {
+            email: credentials.email as string,
+          },
+        });
+
+        // Check if user exists and has password
+        if (!user || !user.password) return null;
+
+        // Check if password matches
+        const isMatch = await compare(
+          credentials.password as string,
+          user.password
+        );
+        if (!isMatch) return null;
+
+        // Return user data
+        return {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+        };
+      },
+    }),
+  ],
   callbacks: {
+    ...commonAuthConfig.callbacks,
     async session({ session, user, trigger, token }: any) {
       // Set some details from the token to the user
       session.user.id = token.sub;
@@ -86,30 +84,6 @@ export const authConfig = {
       }
 
       return token;
-    },
-    async authorized({ request, auth }: any) {
-      // Check for session cart cookie
-      if (!request.cookies.get('sessionCartId')) {
-        // Generate new session cart id cookie
-        const sessionCartId = crypto.randomUUID();
-
-        // Clone the req headers
-        const newRequestHeaders = new Headers(request.headers);
-
-        // Create new response and add the new headers
-        const response = NextResponse.next({
-          request: {
-            headers: newRequestHeaders,
-          },
-        });
-
-        // Set newly generated sessionCartId in the response cookies
-        response.cookies.set('sessionCartId', sessionCartId);
-
-        return response;
-      } else {
-        return true;
-      }
     },
   },
 } satisfies NextAuthConfig;
