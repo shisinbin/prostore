@@ -8,12 +8,16 @@ import type { NextAuthConfig } from 'next-auth';
 import commonAuthConfig from '@/auth.config';
 
 export const authConfig = {
+  pages: {
+    ...commonAuthConfig.pages,
+  },
   session: {
     strategy: 'jwt',
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
   adapter: PrismaAdapter(prisma),
   providers: [
+    ...commonAuthConfig.providers,
     Credentials({
       credentials: {
         email: { type: 'email' },
