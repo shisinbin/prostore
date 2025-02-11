@@ -3,17 +3,31 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-export default function middleware(request: NextRequest) {
+import { auth } from '@/auth';
+
+export default auth(async function middleware(request: NextRequest) {
+  // Check for session cart cookie
   if (!request.cookies.has('sessionCartId')) {
-    const response = NextResponse.next();
+    // Generate new session cart id cookie
     const sessionCartId = crypto.randomUUID();
 
+    // Clone request headers
+    const newRequestHeaders = new Headers(request.headers);
+
+    // Create new response and add the new headers
+    const response = NextResponse.next({
+      request: {
+        headers: newRequestHeaders,
+      },
+    });
+
+    // Set newly generated sessionCartId in the response cookies
     response.cookies.set('sessionCartId', sessionCartId);
 
     return response;
   }
   return NextResponse.next();
-}
+});
 
 export const config = {
   matcher: [
@@ -22,8 +36,8 @@ export const config = {
      * - api (API routes)
      * - _next/static (static files)
      * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
+     * - favicon.ico, sitemap.xml, robots.txt (metadata files)
      */
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+    '/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)',
   ],
 };
