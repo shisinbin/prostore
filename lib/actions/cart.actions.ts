@@ -194,10 +194,12 @@ export async function removeItemFromCart(productId: string) {
     if (!existingItem) throw new Error('Item not found in cart');
 
     // Remove item or reduce quantity from cart
+    let removed = false;
     if (existingItem.qty === 1) {
       cart.items = (cart.items as CartItem[]).filter(
         (x) => x.productId !== existingItem.productId
       );
+      removed = true;
     } else {
       existingItem.qty -= 1;
     }
@@ -207,7 +209,9 @@ export async function removeItemFromCart(productId: string) {
 
     return {
       success: true,
-      message: `${product.name} was removed from cart`,
+      message: `${product.name} ${
+        removed ? 'was removed from' : 'was updated in'
+      } cart`,
     };
   } catch (error) {
     return { success: false, message: formatError(error) };

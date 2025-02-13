@@ -1,13 +1,14 @@
 import { notFound } from 'next/navigation';
+import React from 'react';
+import { Loader } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import ProductPrice from '@/components/shared/Product/ProductPrice';
 import ProductImages from '@/components/shared/Product/ProductImages';
-import AddToCart from '@/components/shared/Product/AddToCart';
+import CartSection from '@/components/shared/Product/CartSection';
 
 import { getProductBySlug } from '@/lib/actions/product.actions';
-import { getMyCart } from '@/lib/actions/cart.actions';
 
 async function ProductDetailsPage(props: {
   params: Promise<{ slug: string }>;
@@ -17,8 +18,6 @@ async function ProductDetailsPage(props: {
   const product = await getProductBySlug(slug);
 
   if (!product) notFound();
-
-  const cart = await getMyCart();
 
   return (
     <section>
@@ -64,9 +63,12 @@ async function ProductDetailsPage(props: {
                 )}
               </div>
               {product.stock > 0 && (
-                <div className='mt-2 flex-center'>
-                  <AddToCart
-                    cart={cart}
+                <React.Suspense
+                  fallback={
+                    <Loader className='mt-4 mx-auto h-4 w-4 animate-spin' />
+                  }
+                >
+                  <CartSection
                     item={{
                       productId: product.id,
                       name: product.name,
@@ -76,7 +78,7 @@ async function ProductDetailsPage(props: {
                       price: product.price,
                     }}
                   />
-                </div>
+                </React.Suspense>
               )}
             </CardContent>
           </Card>
