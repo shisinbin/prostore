@@ -7,6 +7,7 @@ import ProductImages from '@/components/shared/Product/ProductImages';
 import AddToCart from '@/components/shared/Product/AddToCart';
 
 import { getProductBySlug } from '@/lib/actions/product.actions';
+import { getMyCart } from '@/lib/actions/cart.actions';
 
 async function ProductDetailsPage(props: {
   params: Promise<{ slug: string }>;
@@ -16,6 +17,8 @@ async function ProductDetailsPage(props: {
   const product = await getProductBySlug(slug);
 
   if (!product) notFound();
+
+  const cart = await getMyCart();
 
   return (
     <section>
@@ -61,16 +64,19 @@ async function ProductDetailsPage(props: {
                 )}
               </div>
               {product.stock > 0 && (
-                <AddToCart
-                  item={{
-                    productId: product.id,
-                    name: product.name,
-                    slug: product.slug,
-                    qty: 1,
-                    image: product.images![0],
-                    price: product.price,
-                  }}
-                />
+                <div className='mt-2 flex-center'>
+                  <AddToCart
+                    cart={cart}
+                    item={{
+                      productId: product.id,
+                      name: product.name,
+                      slug: product.slug,
+                      qty: 1,
+                      image: product.images![0],
+                      price: product.price,
+                    }}
+                  />
+                </div>
               )}
             </CardContent>
           </Card>
