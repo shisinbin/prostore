@@ -1,7 +1,6 @@
 import type { NextAuthConfig } from 'next-auth';
 
 const commonAuthConfig = {
-  debug: true,
   pages: {
     signIn: '/sign-in',
     error: '/sign-in',
