@@ -7,7 +7,7 @@ import {
   SERVER_URL,
 } from '@/lib/constants';
 import '@/assets/styles/globals.css';
-import { ThemeProvider } from 'next-themes';
+// import { ThemeProvider } from 'next-themes';
 import { Toaster } from '@/components/ui/toaster';
 
 const inter = Inter({
@@ -35,11 +35,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html suppressHydrationWarning={true} lang='en'>
+    <html suppressHydrationWarning={false} lang='en'>
       <body
         className={`${inter.variable} ${robotoSlab.variable} antialiased`}
       >
-        <ThemeProvider
+        {children}
+        {/* <ThemeProvider
           attribute='class'
           defaultTheme='system'
           enableSystem
@@ -47,7 +48,7 @@ export default function RootLayout({
         >
           {children}
           <Toaster />
-        </ThemeProvider>
+        </ThemeProvider> */}
       </body>
     </html>
   );

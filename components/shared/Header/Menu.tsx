@@ -24,7 +24,7 @@ function Menu() {
 function DesktopNav() {
   return (
     <nav className='hidden md:flex w-full max-w-xs gap-1'>
-      <DarkLightToggle />
+      {/* <DarkLightToggle /> */}
       <Button asChild variant='ghost'>
         <Link href='/cart'>
           <ShoppingCart /> Cart
@@ -44,7 +44,7 @@ function MobileNav() {
         </SheetTrigger>
         <SheetContent className='flex flex-col items-start'>
           <SheetTitle>Menu</SheetTitle>
-          <DarkLightToggle />
+          {/* <DarkLightToggle /> */}
           <Button asChild variant='ghost'>
             <Link href='/cart'>
               <ShoppingCart /> Cart
