@@ -1,7 +1,5 @@
 import type { NextAuthConfig } from 'next-auth';
 
-import { PROTECTED_ROUTES } from '@/lib/constants';
-
 const commonAuthConfig = {
   pages: {
     signIn: '/sign-in',
@@ -9,7 +7,7 @@ const commonAuthConfig = {
   },
   providers: [],
   callbacks: {
-    authorized({ request, auth }: any) {
+    authorized() {
       return true;
     },
   },
