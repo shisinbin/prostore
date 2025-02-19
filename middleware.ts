@@ -3,13 +3,31 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import NextAuth from 'next-auth';
+
 import commonAuthConfig from '@/auth.config';
+import { PROTECTED_ROUTES } from './lib/constants';
 
 const { auth } = NextAuth(commonAuthConfig);
 
 // import { auth } from '@/auth';
 
 export default auth(async function middleware(request: NextRequest) {
+  const { nextUrl } = request;
+
+  const isProtectedRoute = PROTECTED_ROUTES.some((route) =>
+    nextUrl.pathname.startsWith(route)
+  );
+
+  if (isProtectedRoute) {
+    const isLoggedIn = !!request.auth;
+
+    if (!isLoggedIn) {
+      const newUrl = new URL('/sign-in', nextUrl.origin);
+      newUrl.searchParams.set('callbackUrl', nextUrl.pathname);
+      return NextResponse.redirect(newUrl);
+    }
+  }
+
   // Check for session cart cookie
   if (!request.cookies.has('sessionCartId')) {
     // Generate new session cart id cookie

@@ -11,7 +11,6 @@ function SignInButton() {
   const searchParams = useSearchParams();
 
   const queryString = searchParams.toString();
-  console.log();
   const callbackUrl =
     pathname !== '/'
       ? encodeURIComponent(

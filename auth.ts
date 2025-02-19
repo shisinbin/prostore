@@ -6,6 +6,7 @@ import { compare } from 'bcrypt-ts-edge';
 import type { NextAuthConfig } from 'next-auth';
 
 import commonAuthConfig from '@/auth.config';
+import { cookies } from 'next/headers';
 
 export const authConfig = {
   pages: {
@@ -56,25 +57,54 @@ export const authConfig = {
   ],
   callbacks: {
     ...commonAuthConfig.callbacks,
-    async session({ session, user, trigger, token }: any) {
+    async session({ session, token }: any) {
       // Set some details from the token to the user
       session.user.id = token.sub;
       session.user.role = token.role;
       session.user.name = token.name;
-
-      // If there is an update, set the user name
-      if (trigger === 'update') {
-        session.user.name = user.name;
-      }
-
       return session;
     },
-    async jwt({ token, user }: any) {
+    async jwt({ token, user, trigger, session }: any) {
       // Assign user fields to the token
       if (user) {
+        token.sub = user.id;
         token.role = user.role;
+        token.name = user.name;
 
-        // THIS SHOULD GO IN SIGN-IN ACTION IF NAME NOT NECESSARY
+        // Persist cart between signed out and signed in
+        if (trigger === 'signIn' || trigger === 'signUp') {
+          const cookiesObject = await cookies();
+          const sessionCartId =
+            cookiesObject.get('sessionCartId')?.value;
+
+          if (sessionCartId) {
+            // Get the cart from database
+            const sessionCart = await prisma.cart.findFirst({
+              where: { sessionCartId },
+            });
+
+            if (sessionCart && sessionCart.userId !== user.id) {
+              // Delete the user's old cart, if they had one
+              await prisma.cart.deleteMany({
+                where: { userId: user.id },
+              });
+
+              // Assign new cart to current user
+              await prisma.cart.update({
+                where: { id: sessionCart.id },
+                data: { userId: user.id },
+              });
+            }
+          }
+        }
+
+        /*
+         * Below is redundant due to zod validation on name field
+         * If we change zod validation to make name optional, then
+         * this code should go in the sign-in action instead,
+         * as it is only necessary to run this once and not
+         * every time jwt callback is invoked
+         */
         // If user has no name then use the email
         // if (user.name === 'NO_NAME') {
         //   token.name = user.email!.split('@')[0];
@@ -85,6 +115,12 @@ export const authConfig = {
         //     data: { name: token.name },
         //   });
         // }
+      }
+
+      // Update the name value on token when session is updated -
+      // this currently only happens when profile form is updated
+      if (trigger === 'update' && session?.user?.name) {
+        token.name = session.user.name;
       }
 
       return token;
