@@ -10,7 +10,6 @@ import {
   SubmitHandler,
   useForm,
 } from 'react-hook-form';
-import { z } from 'zod';
 
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -67,6 +66,7 @@ function ShippingAddressForm({
       </p>
       <Form {...form}>
         <form
+          method='post'
           onSubmit={form.handleSubmit(onSubmit)}
           className='space-y-4'
         >

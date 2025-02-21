@@ -8,8 +8,7 @@ export const APP_DESCRIPTION =
 export const SERVER_URL =
   process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000';
 
-export const LATEST_PRODUCTS_LIMIT =
-  Number(process.env.LATEST_PRODUCTS_LIMIT) || 4;
+export const LATEST_PRODUCTS_LIMIT = 4;
 
 export const PROTECTED_ROUTES = [
   '/shipping-address',
@@ -40,3 +39,12 @@ export const shippingAddressDefaultValues = {
   postalCode: '',
   country: '',
 };
+
+export const PAYMENT_METHODS = process.env.NEXT_PUBLIC_PAYMENT_METHODS
+  ? process.env.NEXT_PUBLIC_PAYMENT_METHODS.split(', ')
+  : ['Paypal', 'Stripe', 'CashOnDelivery'];
+
+export const DEFAULT_PAYMENT_METHOD = process.env
+  .NEXT_PUBLIC_DEFAULT_PAYMENT_METHOD
+  ? process.env.NEXT_PUBLIC_DEFAULT_PAYMENT_METHOD
+  : 'Stripe';
