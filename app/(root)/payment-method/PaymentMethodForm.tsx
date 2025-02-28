@@ -50,9 +50,6 @@ function PaymentMethodForm({
     },
   });
 
-  console.log('preferredPaymentMethod', preferredPaymentMethod);
-  console.log('DEFAULT_PAYMENT_METHOD', DEFAULT_PAYMENT_METHOD);
-
   const onSubmit: SubmitHandler<PaymentMethod> = async (values) => {
     startTransition(async () => {
       const res = await updateUserPaymentMethod(values);

@@ -19,6 +19,8 @@ async function PaymentMethodPage() {
   const user = await getUserById(userId);
   if (!user) throw new Error('User not found');
 
+  if (!user.address) redirect('/shipping-address');
+
   return (
     <>
       <CheckoutSteps current={2} />
