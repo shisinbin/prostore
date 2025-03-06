@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import Menu from '@/components/shared/Header/Menu';
+import MainNav from './MainNav';
 
 import { APP_NAME } from '@/lib/constants';
 
@@ -23,7 +24,7 @@ export default function UserLayout({
                 alt={APP_NAME}
               />
             </Link>
-            {/* Main Nav */}
+            <MainNav className='mx-6' />
             <div className='ml-auto flex items-cwenter space-x-4'>
               <Menu />
             </div>

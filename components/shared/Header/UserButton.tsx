@@ -10,6 +10,7 @@ import {
 import { auth } from '@/auth';
 import { signOutUser } from '@/lib/actions/user.actions';
 import SignInButton from './SignInButton';
+import Link from 'next/link';
 
 async function UserButton() {
   const session = await auth();
@@ -43,6 +44,18 @@ async function UserButton() {
               </div>
             </div>
           </DropdownMenuLabel>
+
+          <DropdownMenuItem>
+            <Link href='/user/profile' className='w-full'>
+              User Profile
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <Link href='/user/orders' className='w-full'>
+              Order History
+            </Link>
+          </DropdownMenuItem>
+
           <DropdownMenuItem className='p-0 mb-1'>
             <form action={signOutUser} className='w-full'>
               <Button
