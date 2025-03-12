@@ -11,6 +11,7 @@ import { auth } from '@/auth';
 import { signOutUser } from '@/lib/actions/user.actions';
 import SignInButton from './SignInButton';
 import Link from 'next/link';
+import AnimatedInitial from './AnimatedInitial';
 
 async function UserButton() {
   const session = await auth();
@@ -29,7 +30,7 @@ async function UserButton() {
               variant='ghost'
               className='relative w-9 h-9 rounded-full ml-2 flex items-center justify-center bg-gray-200'
             >
-              {firstInitial}
+              <AnimatedInitial initial={firstInitial} />
             </Button>
           </div>
         </DropdownMenuTrigger>
@@ -55,6 +56,14 @@ async function UserButton() {
               Order History
             </Link>
           </DropdownMenuItem>
+
+          {session?.user?.role === 'admin' && (
+            <DropdownMenuItem>
+              <Link href='/admin/overview' className='w-full'>
+                Admin
+              </Link>
+            </DropdownMenuItem>
+          )}
 
           <DropdownMenuItem className='p-0 mb-1'>
             <form action={signOutUser} className='w-full'>

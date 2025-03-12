@@ -1,19 +1,26 @@
 'use client';
 
-import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-
 import { cn } from '@/lib/utils';
+import React from 'react';
 
 const links = [
   {
-    title: 'Profile',
-    href: '/user/profile',
+    title: 'Overview',
+    href: '/admin/overview',
+  },
+  {
+    title: 'Products',
+    href: '/admin/products',
   },
   {
     title: 'Orders',
-    href: '/user/orders',
+    href: '/admin/orders',
+  },
+  {
+    title: 'Users',
+    href: '/admin/users',
   },
 ];
 

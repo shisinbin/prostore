@@ -20,9 +20,10 @@ async function OrderDetailsPage(props: {
 
   const session = await auth();
   const userOwnsOrder = order.userId === session?.user?.id;
+  const userIsAdmin = session?.user?.role === 'admin';
 
-  // Redirect the user if they don't own the order
-  if (!userOwnsOrder) return redirect('/'); // redirects to homepage for now
+  if (!userOwnsOrder || !userIsAdmin)
+    return redirect('/unauthorized');
 
   return (
     <>
@@ -32,6 +33,7 @@ async function OrderDetailsPage(props: {
           shippingAddress: order.shippingAddress as ShippingAddress,
         }}
         paypalClientId={process.env.PAYPAL_CLIENT_ID || 'sb'}
+        isAdmin={userIsAdmin}
       />
     </>
   );

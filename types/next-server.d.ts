@@ -8,7 +8,7 @@ declare module 'next/server' {
         email?: string | null;
         // Add other properties as needed, e.g. id or role.
         // id?: string;
-        // role?: string;
+        role?: string | null;
       };
       expires?: string;
     } | null;
