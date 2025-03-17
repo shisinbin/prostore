@@ -14,7 +14,13 @@ const currency = z
 // Schema for inserting products
 export const insertProductSchema = z.object({
   name: z.string().min(3, 'Name must be at least 3 characters'),
-  slug: z.string().min(3, 'Slug must be at least 3 characters'),
+  slug: z
+    .string()
+    .min(3, 'Slug must be at least 3 characters')
+    .regex(
+      /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+      'Slug must only contain lowercase letters, numbers, and hyphens'
+    ),
   category: z
     .string()
     .min(3, 'Category must be at least 3 characters'),
@@ -26,9 +32,14 @@ export const insertProductSchema = z.object({
   images: z
     .array(z.string())
     .min(1, 'Product must have at least one image'),
-  isFeatured: z.boolean(),
-  banner: z.string().nullable(),
+  // isFeatured: z.boolean(),
+  // banner: z.string().nullable(),
   price: currency,
+});
+
+// Schema for updating products
+export const updateProductSchema = insertProductSchema.extend({
+  id: z.string().min(1, 'An ID is required'),
 });
 
 // Schema for signing users in

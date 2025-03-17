@@ -1,7 +1,22 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
+
+const APP_ID = process.env.UPLOADTHING_APPID || 'lyt6ymthqu';
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: `${APP_ID}.ufs.sh`,
+        pathname: '/f/*',
+      },
+      {
+        protocol: 'https',
+        hostname: 'utfs.io',
+        pathname: '/f/*',
+      },
+    ],
+  },
 };
 
 export default nextConfig;

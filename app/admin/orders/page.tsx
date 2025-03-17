@@ -78,7 +78,7 @@ async function AdminOrdersPage(props: {
                     ? formatDateTime(order.deliveredAt).dateTime
                     : 'Not delivered yet'}
                 </TableCell>
-                <TableCell className='space-x-2'>
+                <TableCell className='flex gap-2'>
                   <Button asChild variant='outline' size='sm'>
                     <Link href={`/order/${order.id}`}>Details</Link>
                   </Button>

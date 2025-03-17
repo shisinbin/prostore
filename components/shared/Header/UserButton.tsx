@@ -27,8 +27,8 @@ async function UserButton() {
         <DropdownMenuTrigger asChild>
           <div className='flex items-center'>
             <Button
-              variant='ghost'
-              className='relative w-9 h-9 rounded-full ml-2 flex items-center justify-center bg-gray-200'
+              variant='secondary'
+              className='relative w-9 h-9 rounded-full ml-2 flex items-center justify-center'
             >
               <AnimatedInitial initial={firstInitial} />
             </Button>

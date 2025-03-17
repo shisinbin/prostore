@@ -8,7 +8,7 @@ import { getLatestProducts } from '@/lib/actions/product.actions';
 
 async function HomePage() {
   const latestProducts = await getLatestProducts();
-  // console.log(latestProducts);
+
   return (
     <>
       <ProductList
