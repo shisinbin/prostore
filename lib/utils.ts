@@ -37,9 +37,7 @@ export function formatError(error: any) {
       ? error.meta.target[0]
       : 'Field';
 
-    return `${
-      field.charAt(0).toUpperCase() + field.slice(1)
-    } already exists`;
+    return `${capitaliseWord(field)} already exists`;
   } else {
     // Handle other errors
     if (
@@ -133,4 +131,8 @@ export function formatDateTime(dateString: Date) {
     dateOnly: formattedDate,
     timeOnly: formattedTime,
   };
+}
+
+export function capitaliseWord(word: string) {
+  return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
 }

@@ -36,8 +36,10 @@ import {
 import { Product } from '@/types';
 import { productDefaultValues } from '@/lib/constants';
 import Image from 'next/image';
-import { Card, CardContent } from '../ui/card';
+import { Card, CardContent, CardHeader } from '../ui/card';
 import ProductThumbnail from './ProductThumbnail';
+import { Checkbox } from '../ui/checkbox';
+import { capitaliseWord } from '@/lib/utils';
 
 function ProductForm({
   type,
@@ -89,6 +91,8 @@ function ProductForm({
   };
 
   const images = form.watch('images');
+  const isFeatured = form.watch('isFeatured');
+  const banner = form.watch('banner');
 
   return (
     <Form {...form}>
@@ -250,15 +254,6 @@ function ProductForm({
                   <CardContent className='space-y-2 mt-2 min-h-48'>
                     <div className='flex-start space-x-2'>
                       {images.map((image: string) => (
-                        // <Image
-                        //   key={image}
-                        //   src={image}
-                        //   alt='product image'
-                        //   className='w-20 h-20 object-cover object-center rounded-sm'
-                        //   width={80}
-                        //   height={80}
-                        //   quality={80}
-                        // />
                         <ProductThumbnail
                           key={image}
                           src={image}
@@ -294,12 +289,6 @@ function ProductForm({
                             });
                           }}
                           className='mt-4 ut-button:bg-secondary ut-button:ut-readying:bg-secondary/50'
-                          content={{
-                            button({ ready }) {
-                              if (ready) return 'Upload image';
-                              return 'Getting ready...';
-                            },
-                          }}
                         />
                       </FormControl>
                     </div>
@@ -310,7 +299,59 @@ function ProductForm({
             )}
           />
         </div>
-        <div className='upload-field'>{/* FEATURED? */}</div>
+        <div className='upload-field'>
+          {/* FEATURED? */}
+          Featured Product
+          <Card>
+            <CardContent className='space-y-2 pt-4'>
+              <FormField
+                control={form.control}
+                name='isFeatured'
+                render={({ field }) => (
+                  <FormItem className='flex flex-row items-center space-x-3 space-y-0'>
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormLabel>Is Featured?</FormLabel>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              {isFeatured && banner && (
+                <Image
+                  src={banner}
+                  alt='banner image'
+                  className='w-full object-cover object-center rounded-sm'
+                  width={1920}
+                  height={680}
+                />
+              )}
+              {isFeatured && !banner && (
+                <UploadButton
+                  endpoint='imageUploader'
+                  onClientUploadComplete={(
+                    res: { ufsUrl: string; url: string }[]
+                  ) => {
+                    if (res && res[0]) {
+                      const imageUrl = res[0]?.ufsUrl || res[0]?.url;
+                      form.setValue('banner', imageUrl);
+                    }
+                  }}
+                  onUploadError={(error: Error) => {
+                    toast({
+                      variant: 'destructive',
+                      description: `ERROR! ${error.message}`,
+                    });
+                  }}
+                  className='mt-4 ut-button:bg-secondary ut-button:ut-readying:bg-secondary/50'
+                />
+              )}
+            </CardContent>
+          </Card>
+        </div>
         <div>
           {/* DESCRIPTION */}
           <FormField
@@ -340,9 +381,7 @@ function ProductForm({
         >
           {isSubmitting
             ? 'Submitting...'
-            : `${
-                type.charAt(0).toUpperCase() + type.slice(1)
-              } Product`}
+            : `${capitaliseWord(type)} Product`}
         </Button>
       </form>
     </Form>

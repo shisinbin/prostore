@@ -10,12 +10,11 @@ async function CreateProductPage() {
   await requireAdmin();
 
   return (
-    <>
+    <div className='space-y-8 max-w-5xl mx-auto'>
       <h2 className='h2-bold'>Create Product</h2>
-      <div className='my-8'>
-        <ProductForm type='create' />
-      </div>
-    </>
+
+      <ProductForm type='create' />
+    </div>
   );
 }
 

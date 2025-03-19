@@ -11,6 +11,7 @@ import {
   updateProductSchema,
 } from '../validators';
 import slugify from 'slugify';
+import { deleteImages } from './uploadthing.actions';
 
 // Get latest products
 export async function getLatestProducts() {
@@ -32,6 +33,14 @@ export async function getProductBySlug(slug: string) {
   return await prisma.product.findFirst({
     where: { slug: slug },
   });
+}
+// Get single product by its ID
+export async function getProductById(productId: string) {
+  const data = await prisma.product.findFirst({
+    where: { id: productId },
+  });
+
+  return convertToPlainObject(data);
 }
 
 // Get all products
@@ -84,14 +93,21 @@ export async function getAllProducts({
 // Delete a product
 export async function deleteProduct(id: string) {
   try {
-    const productExists = await prisma.product.findUnique({
+    const product = await prisma.product.findUnique({
       where: { id },
     });
-    if (!productExists) throw new Error('Product not found');
+    if (!product) throw new Error('Product not found');
 
     await prisma.product.delete({ where: { id } });
 
     revalidatePath('/admin/products');
+
+    // Delete images asynchronously
+    if (product.images?.length) {
+      deleteImages(product.images).then((res) => {
+        if (!res.success) console.error(res.message);
+      });
+    }
 
     return { success: true, message: 'Product deleted successfully' };
   } catch (error) {
