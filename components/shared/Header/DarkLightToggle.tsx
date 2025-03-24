@@ -27,7 +27,17 @@ function DarkLightToggle() {
     setMounted(true);
   }, []);
 
-  if (!mounted) return null;
+  if (!mounted) {
+    return (
+      <Button
+        variant='ghost'
+        className='focus-visible:ring-0 focus-visible:ring-offset-0'
+        disabled={true}
+      >
+        <SunMoon className='animate-pulse' />
+      </Button>
+    );
+  }
 
   return (
     <DropdownMenu>

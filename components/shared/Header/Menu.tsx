@@ -11,6 +11,7 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import UserButton from './UserButton';
+import React from 'react';
 
 function Menu() {
   return (
@@ -30,7 +31,18 @@ function DesktopNav() {
           <ShoppingCart /> Cart
         </Link>
       </Button>
-      <UserButton />
+      <React.Suspense
+        fallback={
+          <Button
+            variant='secondary'
+            className='w-9 h-9 rounded-full ml-2 flex items-center justify-center'
+          >
+            ...
+          </Button>
+        }
+      >
+        <UserButton />
+      </React.Suspense>
     </nav>
   );
 }
@@ -50,7 +62,18 @@ function MobileNav() {
               <ShoppingCart /> Cart
             </Link>
           </Button>
-          <UserButton />
+          <React.Suspense
+            fallback={
+              <Button
+                variant='secondary'
+                className='w-9 h-9 rounded-full ml-2 flex items-center justify-center'
+              >
+                ...
+              </Button>
+            }
+          >
+            <UserButton />
+          </React.Suspense>
           <SheetDescription />
         </SheetContent>
       </Sheet>

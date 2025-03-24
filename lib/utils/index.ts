@@ -136,3 +136,12 @@ export function formatDateTime(dateString: Date) {
 export function capitaliseWord(word: string) {
   return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
 }
+
+export function isNumeric(value: any): boolean {
+  return !isNaN(value) && !isNaN(parseFloat(value));
+}
+
+export async function delay(seconds: number) {
+  await new Promise((res) => setTimeout(res, seconds * 1000));
+  return;
+}

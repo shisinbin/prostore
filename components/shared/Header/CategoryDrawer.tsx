@@ -7,12 +7,15 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from '@/components/ui/drawer';
-import { getAllCategories } from '@/lib/actions/product.actions';
 import { MenuIcon, X } from 'lucide-react';
 import Link from 'next/link';
 
-async function CategoryDrawer() {
-  const categories = await getAllCategories();
+async function CategoryDrawer({
+  categoriesPromise,
+}: {
+  categoriesPromise: Promise<{ category: string; _count: number }[]>;
+}) {
+  const categories = await categoriesPromise;
 
   return (
     <Drawer direction='left'>
