@@ -34,3 +34,12 @@ export type Order = z.infer<typeof insertOrderSchema> & {
 };
 
 export type PaymentResult = z.infer<typeof paymentResultSchema>;
+
+export type SearchPageProps = {
+  category?: string;
+  q?: string;
+  page?: string;
+  rating?: string;
+  price?: string;
+  sort?: string;
+};

@@ -30,7 +30,7 @@ function Search({
   }, [searchParams]);
 
   return (
-    <form action='/search' method='GET'>
+    <form action='/browse' method='GET'>
       <div className='flex gap-2'>
         <Select
           name='category'

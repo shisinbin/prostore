@@ -42,7 +42,7 @@ async function CategoryDrawer({
               asChild
             >
               <DrawerClose asChild>
-                <Link href={`/search?category=${category}`}>
+                <Link href={`/browse?category=${category}`}>
                   {category} ({_count})
                 </Link>
               </DrawerClose>
